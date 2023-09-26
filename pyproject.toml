@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "r4c-testcase"
+version = "0.1.0"
+description = "Test case \"R4C - Robots for consumers\", BST Digital"
+authors = ["DREU007 <dreu007@gmail.com>"]
+readme = "README.md"
+packages = [{include = "r4c_testcase"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.2.5"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.1.0"
+ipython = "^8.15.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
