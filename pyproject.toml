@@ -9,6 +9,7 @@ packages = [{include = "r4c_testcase"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.2.5"
+django-extensions = "^3.2.3"
 
 
 [tool.poetry.group.dev.dependencies]
