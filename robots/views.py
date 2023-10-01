@@ -24,17 +24,13 @@ class RobotsExcelView(View):
     def get(self, request, *args, **kwargs):
         # TODO: SQL query within a week, paged by model with all versions and quantity
         report_delta = {'weeks': 1}
+        report_time_start = datetime.datetime.now() - timedelta(**report_delta)
 
         robots = Robot.objects.filter(
-            created__gte=F('created') + timedelta(**report_delta)
-        ).order_by('model', 'version').annotate(
-            combined=ExpressionWrapper(
-                F('model') + F('version'),
-                output_field=CharField(max_length=4)
-            )
+            created__gte=report_time_start
+        ).values('id', 'model', 'version').annotate(
+            Count('id', distinct=True)
         )
-
-        # SELECT DISTINCT ON (model, version) model, version, count(version) ORDER BY model, version;
-        robots = Robot.objects.get()
+        
         # TODO: Generate Excel file
         # TODO: Return direct download link to excel
