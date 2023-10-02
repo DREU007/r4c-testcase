@@ -1,10 +1,10 @@
 from django.test import TestCase, Client
 from django.shortcuts import reverse
 import json
-# Create your tests here.
+
 
 class RobotModelsTest(TestCase):
-    def setUp(self): 
+    def setUp(self):
         self.client: Client = Client()
 
     def test_post(self):
