@@ -25,7 +25,7 @@ class PostJson(View):
         return JsonResponse({'errors': errors}, status=400)
 
 
-class RobotsExcelView(View):
+class RobotsExcelDownloadView(View):
     def get(self, request, *args, **kwargs):
         # Generate report within report_delta
         report_delta = {'weeks': 1}
@@ -69,15 +69,15 @@ class RobotsExcelView(View):
             "grouped_data": grouped_robots,
         }
 
-        temp_fp = make_excel_report(report_settings)
+        temp_fp = make_excel_report(**report_settings)
 
         try:
-            return FileResponse(temp_fp)
+            return FileResponse(open(temp_fp, 'rb'))
         except Exception as error:
             raise error
         finally:
             os.remove(temp_fp)
-            os.rmdir(os.path.dirname(tempfile))
+            os.rmdir(os.path.dirname(temp_fp))
 
 
 def make_excel_report(**settings):
@@ -86,11 +86,11 @@ def make_excel_report(**settings):
 
     report_filename = settings["filename"]
     report_time = settings["report_time"]
-    report_date = report_time.strftime('%d.%m.%Y'),
+    report_date = report_time.strftime('%d.%m.%Y')
 
     temp_dir = tempfile.mkdtemp(dir=os.path.dirname(__file__))
     temp_fp = os.path.join(
-        temp_dir, f"{report_filename}-{report_date}.xlsx"
+        temp_dir, f"{report_filename}@{report_date}.xlsx"
     )
 
     col_titles = settings["titles"]
