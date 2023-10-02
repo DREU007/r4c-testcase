@@ -10,6 +10,7 @@ packages = [{include = "r4c_testcase"}]
 python = "^3.10"
 Django = "^4.2.5"
 django-extensions = "^3.2.3"
+openpyxl = "^3.1.2"
 
 
 [tool.poetry.group.dev.dependencies]
