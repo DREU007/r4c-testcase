@@ -69,6 +69,7 @@ class RobotsExcelDownloadView(View):
         report_settings = {
             "filename": "wk-rep-robots",
             "report_time": report_time_end,
+            "report_delta": report_delta,
             "titles": ROBOT_COL_TITLES,
             "grouped_data": grouped_robots,
         }
@@ -103,8 +104,12 @@ def make_excel_report(**settings):
         report_ws = report_wb.create_sheet(model)
         set_ws_column_titles(report_ws, col_titles)
         set_ws_data(report_ws, group, col_titles)
-
-    report_wb.save(temp_fp)
+    try:
+        report_wb.save(temp_fp)
+    except IndexError:
+        rep = report_wb.create_sheet("Empty")
+        rep['A1'] = f"No reports within {settings['report_delta']}"
+        report_wb.save(temp_fp)
     return temp_fp
 
 

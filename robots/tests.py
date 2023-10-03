@@ -5,7 +5,6 @@ from django.shortcuts import reverse
 from orders.models import Order
 from customers.models import Customer
 from .models import Robot
-from .signals import robot_created
 import json
 
 
@@ -29,7 +28,7 @@ class RobotsTest(TestCase):
             response.content, {'message': 'Data received successfully'}
         )
 
-    @override_settings(EMAIL_BACKEND='django.core.mail.backend.locmem.EmailBackend')
+    # @override_settings(EMAIL_BACKEND='django.core.mail.backend.locmem.EmailBackend')
     def test_email_on_availability(self):
         robot_data = {
             "serial": "R2-D2",
@@ -51,8 +50,6 @@ class RobotsTest(TestCase):
         customer = Customer.objects.create(**customer_data)
         order = Order.objects.create(customer=customer, **order_data)
         
-        robot_created.send(sender=Robot, instance=robot, created=True)
-
         self.assertEqual(len(mail.outbox), 1)
 
         email = mail.outbox[0]
