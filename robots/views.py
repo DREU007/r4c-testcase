@@ -1,4 +1,7 @@
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 from django.http import JsonResponse, FileResponse
 from django.utils import timezone
 from django.db.models import Count
@@ -14,6 +17,7 @@ from .forms import RobotForm
 from .models import Robot
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PostJson(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
