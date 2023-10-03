@@ -5,11 +5,8 @@ from orders.models import Order
 from .models import Robot
 
 
-robot_created = Signal()
-
-
 @receiver(post_save, sender=Robot)
-def check_robot_availability(sender, instance, created, **kwargs):
+def send_email_on_availabilty(sender, instance, created, **kwargs):
     if created:
         try:
             orders = Order.objects.filter(robot_serial=instance.serial)
@@ -22,7 +19,7 @@ def check_robot_availability(sender, instance, created, **kwargs):
                     "Этот робот теперь в наличии. Если вам подходит этот вариант - пожалуйста, свяжитесь с нами"
                 )
                 from_email = "info@r4c.com" 
-                to_emails = orders.values_list('customer__email', flat=True)
+                to_emails = list(orders.values_list('customer__email', flat=True))
 
                 send_mail(subject, message, from_email, to_emails)
         except Order.DoesNotExist:
